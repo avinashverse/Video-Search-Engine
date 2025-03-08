@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ current_video_data.title }} - VideoQuest</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lexend"
+      rel="stylesheet"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="icon" href="{{url_for('static', filename='logo.png')}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Open+Sans:wght@300;600&family=Raleway:wght@300&family=Roboto+Mono:wght@200&family=Syne&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/77d82db749.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      function logout() {
+        location.href = "{{ url_for('auth.logout') }}";
+      }
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <div id="line"></div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div id="siteName">
+        <img src="{{url_for('static', filename='logo.png')}}" />
+        <h3>VideoQuest</h3>
+      </div>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto mr-5">
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="{{ url_for('views.about') }}">About</a>
+          </li>
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="{{ url_for('views.contact') }}"
+              >Contact</a
+            >
+          </li>
+
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="{{ url_for('views.search') }}">Home</a>
+          </li>
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="{{ url_for('views.history') }}"
+              >Watch History</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('creators.show_analytics') }}"
+              >View Analytics</a
+            >
+          </li>
+        </ul>
+
+        <button
+          class="btn btn-outline-danger my-2 my-sm-0 nav-btn"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <div class="search-container px-5">
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="upload"
+        data-toggle="modal"
+        data-target="#videoModal"
+      >
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        Upload
+      </button>
+
+      <div
+        class="modal"
+        id="videoModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="videoModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="videoModalLabel">Submit Video URL</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                id="videoForm"
+                action="{{ url_for('views.upload_video') }}"
+                method="post"
+              >
+                <div class="form-group">
+                  <label for="videoUrl">Video URL:</label>
+                  <input
+                    type="text"
+                    name="url"
+                    class="form-control"
+                    id="videoUrl"
+                    placeholder="Enter the URL"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-danger">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form action="{{ url_for('views.search') }}" method="POST">
+        <input
+          type="text"
+          name="search_query"
+          id="search-bar"
+          placeholder="Search"
+          value=""
+        />
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+    </div>
+
+    <div class="main-container">
+      <div id="video-panel">
+        <div id="video-container">
+          <iframe
+            src="https://www.youtube.com/embed/{{ video_id }}"
+            frameborder="0"
+            allowfullscreen="true"
+          ></iframe>
+        </div>
+        <h2>{{ current_video_data.title }}</h2>
+        <form
+          method="post"
+          action="{{ url_for('views.like') }}"
+          id="like-dislike"
+        >
+          <div id="video-buttons">
+            {% if liked %}
+            <button
+              class="vote-btn active"
+              id="like-button"
+              type="submit"
+              name="action"
+              value="like"
+            >
+              <i class="fa fa-thumbs-up"></i>
+              <p id="like-count">{{ current_video_data.likeCount }}</p>
+            </button>
+            {% else %}
+            <button
+              class="vote-btn"
+              id="like-button"
+              type="submit"
+              name="action"
+              value="like"
+            >
+              <i class="fa fa-thumbs-up"></i>
+              <p id="like-count">{{ current_video_data.likeCount }}</p>
+            </button>
+            {% endif %} {% if disliked %}
+            <button
+              class="vote-btn active"
+              id="dislike-button"
+              type="submit"
+              name="action"
+              value="dislike"
+            >
+              <i class="fa fa-thumbs-down"></i>
+              <p id="dislike-count">{{ current_video_data.dislikeCount }}</p>
+            </button>
+            {% else %}
+
+            <button
+              class="vote-btn"
+              id="dislike-button"
+              type="submit"
+              name="action"
+              value="dislike"
+            >
+              <i class="fa fa-thumbs-down"></i>
+              <p id="dislike-count">{{ current_video_data.dislikeCount }}</p>
+            </button>
+            {% endif %}
+          </div>
+        </form>
+        <form method="post" action="{{ url_for('views.subscribe') }}" id="sub">
+          <div id="video-buttons">
+            {% if subscribed %}
+            <button
+              class="subscribe-btn active"
+              id="subscribe-button"
+              type="submit"
+              name="action"
+              value="subscribe"
+            >
+              <i class="fa-solid fa-bell"></i>
+              SUBSCRIBED
+            </button>
+            {% else %}
+            <button
+              class="subscribe-btn"
+              id="subscribe-button"
+              type="submit"
+              name="action"
+              value="subscribe"
+            >
+              SUBSCRIBE
+            </button>
+            {% endif %}
+          </div>
+        </form>
+        <div class="container" id="desc">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="summary">
+                <p class="collapse" id="collapseSummary">
+                  {{ current_video_data.description }}
+                </p>
+                <a
+                  class="collapsed"
+                  data-toggle="collapse"
+                  href="#collapseSummary"
+                  aria-expanded="false"
+                  aria-controls="collapseSummary"
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-section">
+          <h2>Comments</h2>
+          <form
+            id="commentForm"
+            action="{{ url_for('views.save_comment') }}"
+            method="POST"
+          >
+            <div class="form-group">
+              <input type="hidden" name="video_id" value="{{ video_id }}" />
+              <textarea
+                class="form-control"
+                rows="5"
+                id="comment"
+                name="comment"
+                placeholder="Add a comment"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Add Comment</button>
+          </form>
+        </div>
+
+        <div class="comments">
+          <ul>
+            {% for comment in comments_data %}
+            <li>
+              <img src="{{ url_for('static', filename='anonymous.png') }}" />
+              <h6><span>&#64;</span> {{ comment.username }}</h6>
+              <p>{{ comment.comment }}</p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div id="side-panel">
+        <h2>Video Suggestions</h2>
+        <ul id="suggested-videos">
+          {% for video in suggested_videos %}
+          <li class="suggestion-link" data-video-id="{{ video.videoId }}">
+            <a href="{{ url_for('views.video', video_id=video.videoId) }}">
+              <div class="suggestion-box">
+                <div class="suggestion-thumbnail">
+                  <img
+                    src="{{ video.thumbnails.high.url }}"
+                    alt="Video Thumbnail"
+                  />
+                </div>
+                <div class="suggestion-details">
+                  <div class="suggestion-title">{{ video.title }}</div>
+                  <div class="suggestion-description">
+                    {% set description_text = video.description[:100] + '...' if
+                    video.description|length > 100 else video.description %} {{
+                    description_text }}
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <div id="footersiteName">
+        <img href="{{url_for('static', filename='logo.png')}}" />
+        <h3>VideoQuest</h3>
+      </div>
+
+      <p>©2023 by VideoQuest. All rights reserved.</p>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            $('.vote-btn').click(function (e) {
+                e.preventDefault();
+                var action = $(this).attr('value');
+                var video_id = {{ video_id|tojson }};
+        // console.log(action, video_id)
+        var data = {
+            'action': action,
+            'video_id': video_id
+        };
+        // console.log(data);
+
+        $.ajax({
+            type: 'POST',
+            url: `{{ url_for('views.like') }}`,
+            data: JSON.stringify(data),
+            contentType: "application/json;charset=UTF-8",
+            success: function (response) {
+                var likeButtonElement = document.getElementById('like-button');
+                var dislikeButtonElement = document.getElementById('dislike-button');
+
+                if (response.liked) {
+                    likeButtonElement.classList.add('active');
+                    dislikeButtonElement.classList.remove('active');
+                } else if (response.disliked) {
+                    dislikeButtonElement.classList.add('active');
+                    likeButtonElement.classList.remove('active');
+                } else {
+                    likeButtonElement.classList.remove('active');
+                    dislikeButtonElement.classList.remove('active');
+                }
+
+                var likeCountElement = document.getElementById('like-count');
+                likeCountElement.textContent = `${formatCount(response.likeCount)}`;
+
+                var dislikeCountElement = document.getElementById('dislike-count');
+                dislikeCountElement.textContent = `${formatCount(response.dislikeCount)}`;
+
+                // console.log(response.liked, response.disliked, response.likeCount, response.dislikeCount);
+            }
+        });
+          });
+      });
+    </script>
+
+    <script>
+       $(document).ready(function () {
+            $('.subscribe-btn').click(function (e) {
+                e.preventDefault();
+                var action = $(this).attr('value');
+                var video_id = {{ video_id|tojson }};
+        // console.log(action, video_id)
+        var data = {
+            'action': action,
+            'video_id': video_id
+        };
+        // console.log(data);
+
+        $.ajax({
+            type: 'POST',
+            url: `{{ url_for('views.subscribe') }}`,
+            data: JSON.stringify(data),
+            contentType: "application/json;charset=UTF-8",
+            success: function (response) {
+                var subscribeButtonElement = document.getElementById('subscribe-button');
+                if (response.subscribed) {
+                    subscribeButtonElement.classList.add('active');
+                    subscribeButtonElement.innerHTML = '<i class="fa-solid fa-bell"></i> SUBSCRIBED';
+
+                } else {
+                    subscribeButtonElement.classList.remove('active');
+                    subscribeButtonElement.innerHTML = 'SUBSCRIBE';
+                }
+                // console.log(response.subscribed)
+            }
+        });
+          });
+      });
+    </script>
+
+    <script>
+          $(document).ready(function () {
+          $('.suggestion-link').click(function (e) {
+              e.preventDefault();
+              var nextVideoId = $(this).attr('data-video-id');
+              var currentVideoId = {{ video_id|tojson }};
+              var data = {
+                  'current_video_id': currentVideoId,
+                  'next_video_id': nextVideoId
+              };
+              // console.log(data);
+
+              $.ajax({
+                  type: 'POST',
+                  url: `{{ url_for('views.next_video') }}`,
+                  data: JSON.stringify(data),
+                  contentType: "application/json;charset=UTF-8",
+                  success: function (response) {
+                      // console.log(response);
+                  }
+              });
+
+              window.location.href = $(this).find('a').attr('href');
+          });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $("#videoForm").submit(function (e) {
+          e.preventDefault();
+          var form = $(this);
+          var formData = form.serialize();
+          // console.log(formData)
+
+          $.ajax({
+            type: form.attr("method"),
+            url: form.attr("action"),
+            data: formData,
+            success: function (response) {
+              if (response.success) {
+                $("#videoModal").modal("hide");
+              } else {
+                console.log("Failed to upload video.");
+              }
+            },
+            error: function () {
+              console.log(error);
+            },
+          });
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $("#commentForm").submit(function (e) {
+          e.preventDefault();
+          var form = $(this);
+          var formData = form.serialize();
+
+          $.ajax({
+            type: form.attr("method"),
+            url: form.attr("action"),
+            contentType: "application/x-www-form-urlencoded",
+            data: formData,
+            success: function (response) {
+              if (response.status) {
+                // console.log(response.message);
+
+                $('.comments ul').empty();
+                response.comments.forEach(function(comment){
+                  var newComment = $('<li></li>');
+                  newComment.append('<img src="{{ url_for('static', filename='anonymous.png') }}" />');
+                  newComment.append('<h6><span>&#64;</span> ' + comment.username + '</h6>');
+                  newComment.append('<p>' + comment.comment + '</p>');
+
+
+                  $('.comments ul').append(newComment);
+                });
+              } else {
+                console.log(response.message);
+              }
+            },
+            error: function () {
+              console.log(error);
+            },
+          });
+        });
+      });
+    </script>
+
+    <script>
+      function formatCount(count) {
+        if (count >= 1000000000) {
+          return Math.floor(count / 1000000000) + "B";
+        } else if (count >= 1000000) {
+          return Math.floor(count / 1000000) + "M";
+        } else if (count >= 1000) {
+          return Math.floor(count / 1000) + "K";
+        } else {
+          return count.toString();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var likeCountElement = document.getElementById("like-count");
+        var dislikeCountElement = document.getElementById("dislike-count");
+
+        var likeCount = parseInt(likeCountElement.innerText);
+        var dislikeCount = parseInt(dislikeCountElement.innerText);
+
+        likeCountElement.innerText = formatCount(likeCount);
+        dislikeCountElement.innerText = formatCount(dislikeCount);
+      });
+    </script>
+  </body>
+</html>
