@@ -1,4 +1,4 @@
-# VideoQuest - Video Search Engine
+# Video Search Engine
 
 
 ## Overview
@@ -124,10 +124,3 @@ Showcasing the functionality allowing users to upload favorite YouTube videos an
 1. Install dependencies: `pip install -r requirements.txt`.
 2. Configure database connections in respective files.
 3. Run the Flask application: `python main.py`.
-
-
-## Authors
-- **[Akriti Gupta](mailto:gupta.97@iitj.ac.in)**: Pre-final Year (B.Tech. Artificial Intelligence & Data Science)
-- **[Sagnik Goswami](mailto:goswami.5@iitj.ac.in)**: Pre-final Year (B.Tech. Artificial Intelligence & Data Science)
-- **[Tanish Pagaria](mailto:pagaria.2@iitj.ac.in)**: Pre-final Year (B.Tech. Artificial Intelligence & Data Science)  
-(IIT Jodhpur Undergraduates)
